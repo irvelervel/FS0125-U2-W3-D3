@@ -30,7 +30,7 @@ const getRemoteUsers = function () {
       if (response.ok) {
         console.log('evviva!', response)
         // benissimo, proseguiamo
-        //
+        return response.json()
       } else {
         // vuol dire che ho ottenuto un 400, 404, 403, 401 -> il server ci ha risposto
         // ma ci ha risposto negativamente
@@ -38,6 +38,21 @@ const getRemoteUsers = function () {
         // sacrificio estremo!
         throw new Error('Il server non ha risposto correttamente')
       }
+    })
+    .then((data) => {
+      // qui dentro finiremo una volta finito il response.json()
+      console.log('DATA', data)
+      //   e ora, quello che dobbiamo fare con data lo inseriamo qua!!
+      //   adesso manipoliamo il DOM!
+      //   prendo un riferimento alla ul vuota
+      const list = document.getElementById('users-list') // <ul></ul>
+      data.forEach((user) => {
+        // user è un oggetto!
+        const newLi = document.createElement('li')
+        newLi.classList.add('list-group-item')
+        newLi.innerText = user.name + ' - ' + user.email
+        list.appendChild(newLi)
+      })
     })
     .catch((err) => {
       // finale cattivo della Promise, cosa fare se la Promise finisce male!
